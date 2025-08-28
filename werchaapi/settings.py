@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
 
     'accounts',
+    'catalog',
+    'orders',
 
     # third parties
     'rest_framework',
