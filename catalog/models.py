@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.utils.text import slugify
-
+from django.db.models import Q
 
 class Category(models.Model):
     # مثال: key = 'dog' | 'cat' | 'bird' | 'small'
@@ -46,8 +46,10 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='products')
 
+    # موجودی و وضعیت موجودی
     in_stock = models.BooleanField(default=True)
     stock = models.PositiveIntegerField(default=0)
+
     rating = models.FloatField(default=0)
     badge = models.CharField(max_length=10, choices=BADGE_CHOICES, blank=True, null=True)
 
@@ -63,10 +65,24 @@ class Product(models.Model):
             models.Index(fields=['price']),
             models.Index(fields=['category']),
             models.Index(fields=['brand']),
+            # (اختیاری) اگر زیاد فیلتر می‌کنی، این هم مفید است:
+            # models.Index(fields=['in_stock']),
+        ]
+        constraints = [
+            # اگر in_stock=True باشد، باید stock>0 باشد
+            models.CheckConstraint(
+                name='in_stock_requires_positive_stock',
+                check=Q(in_stock=False) | Q(stock__gt=0),
+            ),
         ]
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # همگام‌سازی خودکار وضعیت موجودی با عدد موجودی
+        self.in_stock = self.stock > 0
+        super().save(*args, **kwargs)
 
     @property
     def badge_label(self):

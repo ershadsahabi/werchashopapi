@@ -1,10 +1,9 @@
+# Werchaback/orders/serializers.py
 from rest_framework import serializers
 from django.db import transaction
 from catalog.models import Product
 from .models import Order, OrderItem
-from collections import Counter
 import re
-
 
 class OrderItemInSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
@@ -19,7 +18,7 @@ class OrderCreateSerializer(serializers.Serializer):
     city = serializers.CharField(max_length=100)
     postal_code = serializers.CharField(max_length=20)
 
-    # ↓↓↓ اعتبارسنجی دقیق‌تر فیلدها (پیام‌های قابل‌مصرف در UI)
+    # ── ولیدیشن فیلدها برای پیام دقیق
     def validate_full_name(self, v):
         if len(v.strip()) < 3:
             raise serializers.ValidationError('نام و نام‌خانوادگی را کامل وارد کنید.')
@@ -27,7 +26,6 @@ class OrderCreateSerializer(serializers.Serializer):
 
     def validate_phone(self, v):
         s = v.strip()
-        # 09XXXXXXXXX یا +989XXXXXXXXX
         if not (re.fullmatch(r'09\d{9}', s) or re.fullmatch(r'\+989\d{9}', s)):
             raise serializers.ValidationError('شماره تماس معتبر نیست (نمونه: 09123456789).')
         return s
@@ -38,14 +36,14 @@ class OrderCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError('کد پستی باید ۱۰ رقم باشد.')
         return s
 
-    def validate_address(self, v):
-        if len(v.strip()) < 10:
-            raise serializers.ValidationError('آدرس باید حداقل ۱۰ کاراکتر باشد.')
-        return v.strip()
-
     def validate_city(self, v):
         if len(v.strip()) < 2:
             raise serializers.ValidationError('نام شهر معتبر نیست.')
+        return v.strip()
+
+    def validate_address(self, v):
+        if len(v.strip()) < 10:
+            raise serializers.ValidationError('آدرس باید حداقل ۱۰ کاراکتر باشد.')
         return v.strip()
 
     def validate_items(self, items):
@@ -55,56 +53,65 @@ class OrderCreateSerializer(serializers.Serializer):
 
     @transaction.atomic
     def create(self, validated_data):
+        """
+        استراتژی: اول همه آیتم‌ها را با lock بررسی می‌کنیم (بدون ایجاد سفارش).
+        اگر هر خطایی بود، همون‌جا برمی‌گردیم (با available و title).
+        اگر نبود، بعد Order + OrderItem می‌سازیم و stock کم می‌کنیم.
+        """
         user = self.context['request'].user
-        items = validated_data.pop('items')
+        items_in = validated_data.pop('items')
 
-
-        # ادغام آیتم‌های تکراری بر اساس product_id
-        merged = Counter()
-        for it in items:
-            merged[it['product_id']] += it['qty']
-        items = [{'product_id': pid, 'qty': q} for pid, q in merged.items()]
-        
-        # جمع‌آوری محصولات
-        ids = [i['product_id'] for i in items]
+        # قفل برای همزمانی
+        ids = [i['product_id'] for i in items_in]
         products = {p.id: p for p in Product.objects.select_for_update().filter(id__in=ids)}
 
-        order = Order.objects.create(user=user, **validated_data)
-
-        total = 0
+        # مرحله‌ی 1: ولیدیشن آیتم‌ها
         errors = []
-        for it in items:
-            p = products.get(it['product_id'])
+        computed = []  # (p, qty, unit_price, subtotal)
+        total = 0
+
+        for it in items_in:
+            pid = it['product_id']
+            qty = it['qty']
+            p = products.get(pid)
             if not p:
-                errors.append({'product_id': it['product_id'], 'detail': 'محصول یافت نشد'})
-                continue
-            if not p.in_stock or p.stock < it['qty']:
-                errors.append({'product_id': p.id, 'detail': 'موجودی کافی نیست'})
+                errors.append({'product_id': pid, 'detail': 'محصول یافت نشد'})
                 continue
 
             unit = p.price
-            qty = it['qty']
-            subtotal = unit * qty
+            # فقط به stock تکیه می‌کنیم (in_stock مشتق از stock است)
+            if p.stock < qty:
+                errors.append({
+                    'product_id': p.id,
+                    'title': p.title,
+                    'available': p.stock,  # برای UX بهتر در فرانت
+                    'detail': 'موجودی کافی نیست',
+                })
+                continue
 
+            subtotal = unit * qty
+            computed.append((p, qty, unit, subtotal))
+            total += subtotal
+
+        if errors:
+            # هیچ تغییری انجام نشده؛ همان‌جا خطا بده
+            raise serializers.ValidationError({'items': errors})
+
+        # مرحله‌ی 2: ایجاد سفارش + آیتم‌ها + کسر موجودی
+        order = Order.objects.create(user=user, **validated_data)
+        for (p, qty, unit, subtotal) in computed:
             OrderItem.objects.create(
                 order=order,
                 product=p,
-                title=p.title,
+                title=p.title,          # snapshot
                 unit_price=unit,
                 qty=qty,
                 subtotal=subtotal,
             )
-            # کسر موجودی ساده (در دنیای واقعی رزرو/پرداخت considerations)
             p.stock -= qty
             if p.stock <= 0:
-                p.in_stock = False
+                p.in_stock = False     # اگر save مدل شما sync می‌کند، این هم خودکار می‌شود
             p.save(update_fields=['stock', 'in_stock'])
-
-            total += subtotal
-
-        if errors:
-            # اگر هر خطایی بود، تراکنش را رول‌ بک کنیم
-            raise serializers.ValidationError({'items': errors})
 
         order.total_amount = total
         order.save(update_fields=['total_amount'])
@@ -119,17 +126,14 @@ class OrderOutSerializer(serializers.ModelSerializer):
         fields = ('id', 'status', 'total_amount', 'created_at', 'items')
 
     def get_items(self, obj):
-        return [
-            {
-                'product_id': it.product_id,
-                'title': it.title,
-                'qty': it.qty,
-                'unit_price': it.unit_price,
-                'subtotal': it.subtotal,
-            }
-            for it in obj.items.all()
-        ]
-    
+        return [{
+            'product_id': it.product_id,
+            'title': it.title,
+            'qty': it.qty,
+            'unit_price': it.unit_price,
+            'subtotal': it.subtotal,
+        } for it in obj.items.all()]
+
 
 # ↓↓↓ خروجی مخصوص پرکردن خودکار آدرس
 class LastAddressOutSerializer(serializers.ModelSerializer):
