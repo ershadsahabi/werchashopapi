@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.db import transaction
 from catalog.models import Product
 from .models import Order, OrderItem
+from collections import Counter
+import re
 
 
 class OrderItemInSerializer(serializers.Serializer):
@@ -17,6 +19,35 @@ class OrderCreateSerializer(serializers.Serializer):
     city = serializers.CharField(max_length=100)
     postal_code = serializers.CharField(max_length=20)
 
+    # ↓↓↓ اعتبارسنجی دقیق‌تر فیلدها (پیام‌های قابل‌مصرف در UI)
+    def validate_full_name(self, v):
+        if len(v.strip()) < 3:
+            raise serializers.ValidationError('نام و نام‌خانوادگی را کامل وارد کنید.')
+        return v.strip()
+
+    def validate_phone(self, v):
+        s = v.strip()
+        # 09XXXXXXXXX یا +989XXXXXXXXX
+        if not (re.fullmatch(r'09\d{9}', s) or re.fullmatch(r'\+989\d{9}', s)):
+            raise serializers.ValidationError('شماره تماس معتبر نیست (نمونه: 09123456789).')
+        return s
+
+    def validate_postal_code(self, v):
+        s = v.strip().replace('-', '').replace(' ', '')
+        if not re.fullmatch(r'\d{10}', s):
+            raise serializers.ValidationError('کد پستی باید ۱۰ رقم باشد.')
+        return s
+
+    def validate_address(self, v):
+        if len(v.strip()) < 10:
+            raise serializers.ValidationError('آدرس باید حداقل ۱۰ کاراکتر باشد.')
+        return v.strip()
+
+    def validate_city(self, v):
+        if len(v.strip()) < 2:
+            raise serializers.ValidationError('نام شهر معتبر نیست.')
+        return v.strip()
+
     def validate_items(self, items):
         if not items:
             raise serializers.ValidationError('سبد خرید خالی است.')
@@ -27,6 +58,13 @@ class OrderCreateSerializer(serializers.Serializer):
         user = self.context['request'].user
         items = validated_data.pop('items')
 
+
+        # ادغام آیتم‌های تکراری بر اساس product_id
+        merged = Counter()
+        for it in items:
+            merged[it['product_id']] += it['qty']
+        items = [{'product_id': pid, 'qty': q} for pid, q in merged.items()]
+        
         # جمع‌آوری محصولات
         ids = [i['product_id'] for i in items]
         products = {p.id: p for p in Product.objects.select_for_update().filter(id__in=ids)}
@@ -91,3 +129,10 @@ class OrderOutSerializer(serializers.ModelSerializer):
             }
             for it in obj.items.all()
         ]
+    
+
+# ↓↓↓ خروجی مخصوص پرکردن خودکار آدرس
+class LastAddressOutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('full_name', 'phone', 'address', 'city', 'postal_code')
