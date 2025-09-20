@@ -10,6 +10,7 @@ from .serializers import ProductListSerializer, ProductDetailSerializer
 
 class ProductListView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_scope = 'public_read'
 
     def get(self, request):
         qs = Product.objects.select_related('category', 'brand').all()

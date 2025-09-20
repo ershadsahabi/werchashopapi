@@ -1,0 +1,8 @@
+Django==5.2.5
+djangorestframework
+django-cors-headers
+django-environ==0.11.2
+gunicorn
+pillow
+psycopg[binary]
+

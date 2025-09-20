@@ -1,0 +1,355 @@
+[
+  {
+    "model": "blog.category",
+    "pk": 1001,
+    "fields": {
+      "name": "غذا و تغذیه",
+      "slug": "food-and-nutrition",
+      "description": "راهنماهای انتخاب و نگهداری غذای حیوانات خانگی با محور ایمنی و کیفیت."
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 1002,
+    "fields": {
+      "name": "لوازم و تجهیزات",
+      "slug": "supplies-and-gear",
+      "description": "مرور و مقایسه لوازم غیر دارویی مناسب پت‌شاپ‌ها."
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 1003,
+    "fields": {
+      "name": "آموزش و نگهداری",
+      "slug": "training-and-care",
+      "description": "نکات نگهداری روزمره، بهداشت، و آموزش مثبت‌گرا."
+    }
+  },
+
+  {
+    "model": "blog.reference",
+    "pk": 2001,
+    "fields": {
+      "title": "AAFCO Dog and Cat Food Nutrient Profiles",
+      "url": "https://petfood.aafco.org",
+      "authors_text": "AAFCO",
+      "year": "2024",
+      "source": "AAFCO",
+      "abstract": "الزامات تغذیه‌ای حداقلی برای غذای سگ و گربه.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2002,
+    "fields": {
+      "title": "FEDIAF Nutritional Guidelines",
+      "url": "https://fediaf.org",
+      "authors_text": "FEDIAF",
+      "year": "2023",
+      "source": "FEDIAF",
+      "abstract": "راهنمای اروپایی تغذیه پت.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2003,
+    "fields": {
+      "title": "WSAVA Global Nutrition Toolkit",
+      "url": "https://wsava.org",
+      "authors_text": "WSAVA",
+      "year": "2023",
+      "source": "WSAVA",
+      "abstract": "چک‌لیست ارزیابی کیفیت برند غذای پت.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2004,
+    "fields": {
+      "title": "Cat Litter Materials Comparison",
+      "url": "https://example.org/cat-litter-review",
+      "authors_text": "Team Example",
+      "year": "2022",
+      "source": "Example Review",
+      "abstract": "مقایسه بسترهای معدنی، گیاهی و کلامپینگ.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2005,
+    "fields": {
+      "title": "Safe Pet Toy Materials",
+      "url": "https://example.org/pet-toy-safety",
+      "authors_text": "Safety Group",
+      "year": "2021",
+      "source": "Pet Safety",
+      "abstract": "مواد ایمن برای اسباب‌بازی حیوانات.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2006,
+    "fields": {
+      "title": "Hydration Tips for Dogs & Cats",
+      "url": "https://example.org/hydration",
+      "authors_text": "Vet Writers",
+      "year": "2020",
+      "source": "Vet Blog",
+      "abstract": "افزایش مصرف آب در حیوانات خانگی.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2007,
+    "fields": {
+      "title": "Pet Carrier Size Guide",
+      "url": "https://example.org/carrier-size",
+      "authors_text": "Travel Pets",
+      "year": "2019",
+      "source": "Travel Pets",
+      "abstract": "انتخاب سایز با توجه به استاندارد خطوط هوایی.",
+      "notes": ""
+    }
+  },
+  {
+    "model": "blog.reference",
+    "pk": 2008,
+    "fields": {
+      "title": "Cleaning & Odor Control Best Practices",
+      "url": "https://example.org/odor-control",
+      "authors_text": "Home Care",
+      "year": "2021",
+      "source": "Home Care",
+      "abstract": "بهداشت خانه با حضور پت بدون مواد دارویی.",
+      "notes": ""
+    }
+  },
+
+  {
+    "model": "blog.post",
+    "pk": 3001,
+    "fields": {
+      "title": "راهنمای انتخاب غذای خشک سگ: برچسب‌خوانی ساده",
+      "slug": "dog-dry-food-label-basics",
+      "excerpt": "در این راهنما یاد می‌گیرید چطور ترکیبات غذای خشک سگ را سریع و درست بخوانید.",
+      "content_html": "<p>بررسی ترکیبات اصلی (پروتئین حیوانی، چربی باکیفیت، فیبر)، حداقل آنالیز تضمینی، و استانداردهای AAFCO/FEDIAF. از ادعاهای مبهم مثل «پرمیوم» عبور کنید و به فهرست مواد و پروفایل تغذیه‌ای توجه کنید.</p>",
+      "cover": null,
+      "category": 1001,
+      "seo_title": "برچسب‌خوانی غذای خشک سگ",
+      "meta_description": "نکات کلیدی انتخاب غذای خشک سگ با تکیه بر استانداردها.",
+      "status": "published",
+      "is_featured": true,
+      "reading_time_min": 3,
+      "published_at": "2025-07-01T10:00:00Z",
+      "created_at": "2025-07-01T10:00:00Z",
+      "updated_at": "2025-07-01T10:00:00Z",
+      "author": null,
+      "references": [2001, 2002, 2003]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3002,
+    "fields": {
+      "title": "غذای مرطوب گربه: کی مناسب‌تر است؟",
+      "slug": "when-to-use-wet-cat-food",
+      "excerpt": "مزایا و زمان‌های مناسب برای استفاده از غذای مرطوب.",
+      "content_html": "<p>غذای مرطوب به افزایش هیدراسیون کمک می‌کند، مخصوصاً برای گربه‌هایی که کم آب می‌خورند. نکات نگهداری در یخچال و سرو ایمن را مرور می‌کنیم.</p>",
+      "cover": null,
+      "category": 1001,
+      "seo_title": "زمان استفاده از غذای مرطوب گربه",
+      "meta_description": "افزایش هیدراسیون و نکات نگهداری غذای مرطوب.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 2,
+      "published_at": "2025-07-05T09:30:00Z",
+      "created_at": "2025-07-05T09:30:00Z",
+      "updated_at": "2025-07-05T09:30:00Z",
+      "author": null,
+      "references": [2002, 2006]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3003,
+    "fields": {
+      "title": "کدام بستر گربه برای خانه‌ی شما بهتر است؟",
+      "slug": "best-cat-litter-choices",
+      "excerpt": "مقایسه بستر معدنی، گیاهی و کلامپینگ از نظر جذب بو و گردوغبار.",
+      "content_html": "<p>اگر حساسیت تنفسی دارید، بسترهای گردوغبار کم را انتخاب کنید. بوی بد با انتخاب صحیح و نظافت منظم کمتر می‌شود.</p>",
+      "cover": null,
+      "category": 1002,
+      "seo_title": "انتخاب بستر گربه",
+      "meta_description": "راهنمای خرید بستر گربه با کمترین گردوغبار و کنترل بو.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 3,
+      "published_at": "2025-07-10T08:15:00Z",
+      "created_at": "2025-07-10T08:15:00Z",
+      "updated_at": "2025-07-10T08:15:00Z",
+      "author": null,
+      "references": [2004, 2008]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3004,
+    "fields": {
+      "title": "کاسه آب سیرکولاسیون‌دار: آیا واقعاً گربه بیشتر آب می‌خورد؟",
+      "slug": "cat-fountains-hydration",
+      "excerpt": "مزایا و نکات نگهداری فواره‌های آب برای گربه.",
+      "content_html": "<p>آب در حال گردش تازه‌تر می‌ماند و برخی گربه‌ها به آن علاقه دارند. فیلتر را طبق برنامه تعویض کنید و هفتگی شستشو دهید.</p>",
+      "cover": null,
+      "category": 1002,
+      "seo_title": "فواره آب گربه و هیدراسیون",
+      "meta_description": "آیا فواره آب به افزایش نوشیدن آب کمک می‌کند؟",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 2,
+      "published_at": "2025-07-12T11:00:00Z",
+      "created_at": "2025-07-12T11:00:00Z",
+      "updated_at": "2025-07-12T11:00:00Z",
+      "author": null,
+      "references": [2006]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3005,
+    "fields": {
+      "title": "راهنمای انتخاب اسباب‌بازی ایمن برای سگ‌های جوان",
+      "slug": "safe-toys-for-young-dogs",
+      "excerpt": "اندازه، جنس، و دوام اسباب‌بازی‌ها را چگونه بسنجیم؟",
+      "content_html": "<p>اسباب‌بازی باید بزرگ‌تر از دهانه‌ی بلع باشد و از مواد غیرسمی ساخته شود. نظارت هنگام بازی فراموش نشود.</p>",
+      "cover": null,
+      "category": 1002,
+      "seo_title": "اسباب‌بازی ایمن برای توله‌سگ",
+      "meta_description": "انتخاب اسباب‌بازی غیرسمی و بادوام برای سگ‌های جوان.",
+      "status": "published",
+      "is_featured": true,
+      "reading_time_min": 3,
+      "published_at": "2025-07-15T14:20:00Z",
+      "created_at": "2025-07-15T14:20:00Z",
+      "updated_at": "2025-07-15T14:20:00Z",
+      "author": null,
+      "references": [2005]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3006,
+    "fields": {
+      "title": "برنامه‌ی ساده تغذیه روزانه گربه‌ی خانه‌نشین",
+      "slug": "simple-indoor-cat-feeding-plan",
+      "excerpt": "چند وعده؟ چه مقدار؟ و چگونه از اضافه‌وزن پیشگیری کنیم؟",
+      "content_html": "<p>بر اساس وزن هدف، کالری روزانه را تقسیم کنید. از پیمانه‌ی دقیق استفاده کرده و تشویقی‌ها را حساب کنید.</p>",
+      "cover": null,
+      "category": 1001,
+      "seo_title": "برنامه تغذیه روزانه گربه",
+      "meta_description": "تنظیم وعده‌ها و کنترل کالری برای گربه خانه‌نشین.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 3,
+      "published_at": "2025-07-18T07:50:00Z",
+      "created_at": "2025-07-18T07:50:00Z",
+      "updated_at": "2025-07-18T07:50:00Z",
+      "author": null,
+      "references": [2002, 2003]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3007,
+    "fields": {
+      "title": "راهنمای خرید باکس حمل: اندازه استاندارد و تهویه مناسب",
+      "slug": "pet-carrier-buying-guide",
+      "excerpt": "برای سفر شهری و هوایی دنبال چه ویژگی‌هایی باشیم؟",
+      "content_html": "<p>اندازه‌ی باکس باید امکان ایستادن و چرخش حیوان را بدهد. قفل ایمن، تهویه کافی و کف ضدلغزش مهم‌اند.</p>",
+      "cover": null,
+      "category": 1002,
+      "seo_title": "انتخاب باکس حمل حیوان",
+      "meta_description": "سایزبندی و ویژگی‌های کلیدی باکس حمل.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 2,
+      "published_at": "2025-07-21T10:10:00Z",
+      "created_at": "2025-07-21T10:10:00Z",
+      "updated_at": "2025-07-21T10:10:00Z",
+      "author": null,
+      "references": [2007]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3008,
+    "fields": {
+      "title": "تمیزکردن خانه با حضور پت: بوگیری بدون مواد دارویی",
+      "slug": "odor-control-non-medicinal",
+      "excerpt": "راهکارهای ساده برای کنترل بو با بستر مناسب و نظافت منظم.",
+      "content_html": "<p>زمان‌بندی جمع‌آوری فضولات، انتخاب بستر مناسب و تهویه محیط، نقش اصلی در بوگیری دارند. از آنزیم‌های غیر دارویی خانگی نیز می‌توان بهره برد.</p>",
+      "cover": null,
+      "category": 1003,
+      "seo_title": "بوگیری ایمن در خانه پت‌دوست",
+      "meta_description": "نکات بهداشت و بوگیری بدون دارو.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 3,
+      "published_at": "2025-07-23T16:40:00Z",
+      "created_at": "2025-07-23T16:40:00Z",
+      "updated_at": "2025-07-23T16:40:00Z",
+      "author": null,
+      "references": [2008, 2004]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3009,
+    "fields": {
+      "title": "سوالات متداول درباره تشویقی‌ها: چقدر و کِی؟",
+      "slug": "pet-treats-how-much-and-when",
+      "excerpt": "تعادل بین آموزش، انگیزه و کالری دریافتی.",
+      "content_html": "<p>تشویقی‌ها بیش از ۱۰٪ کالری روزانه نباشند. برای آموزش، تکه‌های کوچک و کم‌کالری مناسب‌ترند.</p>",
+      "cover": null,
+      "category": 1001,
+      "seo_title": "مصرف درست تشویقی برای پت",
+      "meta_description": "حد مجاز کالری و زمان مناسب استفاده از تشویقی.",
+      "status": "published",
+      "is_featured": false,
+      "reading_time_min": 2,
+      "published_at": "2025-07-27T09:00:00Z",
+      "created_at": "2025-07-27T09:00:00Z",
+      "updated_at": "2025-07-27T09:00:00Z",
+      "author": null,
+      "references": [2003, 2002]
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 3010,
+    "fields": {
+      "title": "۵ اشتباه رایج در انتخاب قلاده و هارنس",
+      "slug": "common-mistakes-collar-vs-harness",
+      "excerpt": "اندازه‌گیری درست، نقاط فشار، و نوع قفل را جدی بگیرید.",
+      "content_html": "<p>برای سگ‌های کشنده، هارنس Y شکل با نقطه اتصال جلویی می‌تواند کنترل بهتری بدهد. اندازه‌گیری دور سینه حیاتی است.</p>",
+      "cover": null,
+      "category": 1002,
+      "seo_title": "انتخاب درست قلاده و هارنس",
+      "meta_description": "نکات کاربردی برای خرید قلاده و هارنس ایمن.",
+      "status": "published",
+      "is_featured": true,
+      "reading_time_min": 3,
+      "published_at": "2025-07-30T12:25:00Z",
+      "created_at": "2025-07-30T12:25:00Z",
+      "updated_at": "2025-07-30T12:25:00Z",
+      "author": null,
+      "references": [2005]
+    }
+  }
+]

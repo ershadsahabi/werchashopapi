@@ -1,0 +1,32 @@
+{
+  "categories": [
+    { "slug": "nutrition", "name": "تغذیه", "description": "" }
+  ],
+  "references": [
+    {
+      "url": "https://example.com/cat-obesity-2024",
+      "title": "Cat Obesity Study 2024",
+      "authors_text": "Doe et al.",
+      "year": "2024",
+      "source": "Vet Journal",
+      "abstract": "Obesity risks after neutering...",
+      "notes": ""
+    }
+  ],
+  "posts": [
+    {
+      "slug": "post-neutered-cat-weight",
+      "title": "کنترل وزن گربه بعد از عقیم‌سازی",
+      "excerpt": "راهنمای سریع...",
+      "content_html": "<p>... متن با <sup class=\"ref\" data-ref-id=\"https://example.com/cat-obesity-2024\">[1]</sup> ...</p>",
+      "cover": "blog/covers/weight1.jpg",
+      "category_slug": "nutrition",
+      "reading_time_min": 5,
+      "is_featured": true,
+      "published_at": "2025-09-01T09:00:00Z",
+      "references_urls": ["https://example.com/cat-obesity-2024"],
+      "seo_title": "کنترل وزن گربه بعد از عقیم‌سازی",
+      "meta_description": "نکات تغذیه پس از عقیم‌سازی"
+    }
+  ]
+}
