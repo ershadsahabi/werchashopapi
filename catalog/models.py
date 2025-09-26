@@ -1,19 +1,30 @@
+# Werch_app\Werchaback\catalog\models.py
+
 import uuid
 from django.db import models
 from django.utils.text import slugify
 from django.db.models import Q
 
+# Werch_app/Werchaback/catalog/models.py
 class Category(models.Model):
-    # مثال: key = 'dog' | 'cat' | 'bird' | 'small'
+    # مثال: key = 'toys' | 'litter' | 'dry-food' | ...
     key = models.SlugField(max_length=50, unique=True, db_index=True)
     label = models.CharField(max_length=100)
+
+    # جدید:
+    image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    description = models.TextField(blank=True, default='')
+    is_active = models.BooleanField(default=True)
+    sort_order = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+        ordering = ['sort_order', 'label']   # برای نمایش مرتب
 
     def __str__(self):
         return self.label
+
 
 
 class Brand(models.Model):

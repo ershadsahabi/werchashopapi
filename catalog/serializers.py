@@ -1,5 +1,7 @@
+# Werch_app\Werchaback\catalog\serializers.py
+
 from rest_framework import serializers
-from .models import Product, ProductImage
+from .models import Product, ProductImage, Category
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -7,10 +9,14 @@ class ProductListSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='category.key')
     brand = serializers.CharField(source='brand.name')
     badge = serializers.SerializerMethodField()
+    slug = serializers.CharField() 
 
     class Meta:
         model = Product
-        fields = ('id', 'title', 'price', 'image', 'rating', 'in_stock', 'stock', 'badge', 'category', 'brand')
+        fields = (
+            'id', 'slug', 'title', 'price', 'image',
+            'rating', 'in_stock', 'stock', 'badge', 'category', 'brand'
+        )
 
     def get_image(self, obj):
         req = self.context.get('request')
@@ -41,3 +47,20 @@ class ProductDetailSerializer(ProductListSerializer):
                 'alt': im.alt or '',
             })
         return out
+    
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ('key', 'label', 'image', 'description')
+
+    def get_image(self, obj):
+        req = self.context.get('request')
+        if obj.image and hasattr(obj.image, 'url'):
+            url = obj.image.url
+            return req.build_absolute_uri(url) if req else url
+        return None
+

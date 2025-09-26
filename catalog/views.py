@@ -1,11 +1,21 @@
+# Werch_app\Werchaback\catalog\views.py
+
 from math import ceil
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from .models import Product, Category, Brand
-from .serializers import ProductListSerializer, ProductDetailSerializer
+from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer
 
+class CategoryListView(APIView):
+    permission_classes = [permissions.AllowAny]
+    throttle_scope = 'public_read'
+
+    def get(self, request):
+        qs = Category.objects.filter(is_active=True)
+        ser = CategorySerializer(qs, many=True, context={'request': request})
+        return Response({'items': ser.data})
 
 
 class ProductListView(APIView):
@@ -31,9 +41,16 @@ class ProductListView(APIView):
 
         q = _clean(q)
         cat = _clean(cat)
+        cats = Category.objects.filter(is_active=True).order_by('sort_order', 'label')
+        cat_ser = CategorySerializer(cats, many=True, context={'request': request})
         brand = _clean(brand)
+        brands = list(Brand.objects.order_by('name').values_list('name', flat=True))
         min_price = _clean(min_price)
         max_price = _clean(max_price)
+        
+        cats = Category.objects.filter(is_active=True).order_by('sort_order', 'label')
+        cat_ser = CategorySerializer(cats, many=True, context={'request': request})
+
 
         # تبدیل امن به عدد
         try:
@@ -90,9 +107,9 @@ class ProductListView(APIView):
             'pages': pages,
             'page': page,
             'facets': {
-                'categories': categories,
+                'categories': cat_ser.data,   # ← الان شامل image/description هم هست
                 'brands': brands,
-            }
+            }       
         })
 
 
